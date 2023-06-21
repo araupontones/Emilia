@@ -1,25 +1,52 @@
-library(rio)
-library(rwhatsapp)
-library(stringr)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(extrafont)
-library(glue)
 
 #font_import(paths = "C:/Users/andre/AppData/Local/Microsoft/Windows/Fonts")
 #loadfonts(device = "win")
 #get raw data ---------------------------------------------------------------------
+drive_auth(email = 'araupontones@gmail.com')
+#define tempfile
+my_txt <- tempfile(fileext = '.txt')
+
+#get files
+f <- drive_get("Emilia/WhatsApp Chat with Marti España.txt")
 
 
-raw <- rwa_read(file.path('data', list.files('data'))) 
+#get time of files this ifo comes in a list form for each row
+time <- sapply(f$drive_resource, function(x){
+  
+  x$modifiedByMeTime
+  
+})
+
+
+f$time <- lubridate::ymd_hms(time)
+
+#get latest file
+latest <- which(f$time == max(f$time) )
+f_id <- f$id[latest]
+drive_download(f_id, path = my_txt)
+raw <- rwa_read(my_txt)
+
+#remove old files, every time that data is exported to drive, the old files arent
+# replaced.  Thus, lets remove them
+lapply(f$id[-latest], function(x){
+  
+  drive_rm(x)
+  
+})
+
+#remove contacts file. In case they exist
+contacts <- drive_get('Emilia/2 contacts.vcf')
+lapply(contacts$id, function(x){
+  drive_rm(x)
+})
+
+
 
 
 # to get the name of the person who sent the message ---------------------------
 #I am doing this because some times the two send a message at the exact same time
 names <-raw %>%
   filter(str_detect(text, "✊"))
-
 
 #Get the horas when sleeping and waking up =====================================
 
@@ -62,12 +89,31 @@ get_horas <- function(.data,new_var,my_emoji){
 
 sleep <- get_horas(raw,new_var = duerme,"✊")
 
+
+#awake data -----------------------------------------------------------
 awake <- get_horas(raw,new_var = despierta, "👀")
+
+add_awake <- tibble(
+  
+  despierta = lubridate::ymd_hms(c("2023-06-02 12:20:00",
+                                   "2023-06-10 15:30:00")),
+  
+  fecha = c("2023-06-02",
+            "2023-06-10")
+  
+)
+
+
+awake_all <- rbind(awake, add_awake) %>% 
+  arrange(despierta)
+
+
+
 
 
 #Join sleep and awake ==========================================================
 all <- sleep %>%
-  full_join(awake, by = c("fecha")) %>%
+  full_join(awake_all, by = c("fecha")) %>%
   #just to arrange data
   mutate(hora = ifelse(is.na(duerme), despierta, duerme)) %>%
   arrange(fecha, hora) %>%
@@ -94,7 +140,7 @@ all <- sleep %>%
   
 
 
-
+rio::export(all, 'sleep.rds')
 
 
    
@@ -106,7 +152,7 @@ data_plot <- all %>%
   pivot_longer(-c(fecha),
                names_to = "indicador",
                values_to = 'hora') %>%
-  filter(!is.na(hora)) %>%
+  dplyr::filter(!is.na(hora)) %>%
   mutate(hora_plot = lubridate::ymd_hms(paste("2025-01-01", str_sub(hora, 11,19))))
 
 
@@ -201,9 +247,14 @@ ggplot(data_duracion,
        x = '',
        title = "Duración promedio de siestas de Emilia",
        caption = "Data: Mensajes de WhatsApp con Martina") +
-theme_emilia()
+theme_emilia() +
+  theme(axis.text.x = element_text(angle = 90))
 
 ggsave('plots/average_nap_time.png')
+
+
+
+
 
 
 #Numero de siestas ============================================================
@@ -230,7 +281,8 @@ labs(y = 'Duración (minutos)',
      x = '',
      title = "Duración TOTAL de siestas de Emilia",
      caption = "Data: Mensajes de WhatsApp con Martina") +
-  theme_emilia()
+  theme_emilia()  +
+  theme(axis.text.x = element_text(angle = 90))
 
 ggsave('plots/total_nap_time.png')
 
@@ -240,7 +292,7 @@ ggsave('plots/total_nap_time.png')
 promedio <- mean(all$tiempo_entre, na.rm = T)
 
 all %>%
-  filter(!is.na(tiempo_entre), tiempo_entre < 250) %>%
+  filter(!is.na(tiempo_entre), tiempo_entre < 160) %>%
   ggplot(aes(x = duerme,
              y = tiempo_entre)) +
   geom_line(color = '#B870CB') +
