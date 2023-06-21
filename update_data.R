@@ -3,7 +3,11 @@ gmdacr::load_functions('functions')
 #'Downloads data from gdrive ==================================================
 
 #authenticate ------------------------------------------------------------------
-drive_auth(email = 'araupontones@gmail.com')
+drive_auth(email = 'araupontones@gmail.com',
+                    token = 'a754e77d3ef29c76c4e8df0bce200e88_araupontones@gmail.com'
+                    )
+
+
 
 #get raw data ------------------------------------------------------------------
 
@@ -14,6 +18,8 @@ my_txt <- tempfile(fileext = '.txt')
 
 #get list of files with this pattern
 f <- drive_get("Emilia/WhatsApp Chat with Marti España.txt")
+?drive_get
+
 #get the time of each file
 #get_time(f) is created in functions 
 f_time <- get_time(f)
