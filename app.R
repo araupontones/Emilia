@@ -1,5 +1,14 @@
 library(shiny)
 library(shinycssloaders)
+library(rio)
+library(rwhatsapp)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(extrafont)
+library(glue)
+library(googledrive)
 
 options(
   # whenever there is one account token found, use the cached token
