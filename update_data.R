@@ -3,7 +3,7 @@ gmdacr::load_functions('functions')
 #'Downloads data from gdrive ==================================================
 
 #authenticate ------------------------------------------------------------------
-#drive_auth(email = 'araupontones@gmail.com')
+drive_auth(email = 'araupontones@gmail.com')
 
 #get raw data ------------------------------------------------------------------
 
