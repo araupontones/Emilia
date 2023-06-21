@@ -10,15 +10,20 @@ library(extrafont)
 library(glue)
 library(googledrive)
 
+# options(
+#   # whenever there is one account token found, use the cached token
+#   gargle_oauth_email = 'araupontones@gmail.com',
+#   # specify auth tokens should be stored in a hidden directory ".secrets"
+#   gargle_oauth_cache = ".secrets"
+# )
+
 options(
-  # whenever there is one account token found, use the cached token
-  gargle_oauth_email = 'araupontones@gmail.com',
-  # specify auth tokens should be stored in a hidden directory ".secrets"
-  gargle_oauth_cache = ".secrets"
+  gargle_oauth_cache = ".secrets",
+  gargle_oauth_email = "araupontones@gmail.com"
 )
 
-
-
+# gargle::gargle_oauth_cache()
+list.files(".secrets/")
 ui <- fluidPage(
   
   
