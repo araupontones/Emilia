@@ -22,8 +22,10 @@ options(
   gargle_oauth_email = "araupontones@gmail.com"
 )
 
-# gargle::gargle_oauth_cache()
-list.files(".secrets/")
+# scopes <- "https://www.googleapis.com/auth/drive"
+# token <- gargle::credentials_user_oauth2(scopes, client = gargle_client())
+
+
 ui <- fluidPage(
   
   

@@ -7,8 +7,8 @@ gmdacr::load_functions('functions')
 #                     token = 'a754e77d3ef29c76c4e8df0bce200e88_araupontones@gmail.com'
 #                     )
 
-drive_auth(cache = ".secrets", email = TRUE)
-
+#drive_auth(cache = ".secrets", email = TRUE)
+drive_auth(token = readRDS("blah.rds"))
 #get raw data ------------------------------------------------------------------
 
 #define tempfile
