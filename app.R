@@ -17,7 +17,7 @@ options(
   gargle_oauth_cache = ".secrets"
 )
 
-googledrive::drive_auth()
+
 
 ui <- fluidPage(
   
