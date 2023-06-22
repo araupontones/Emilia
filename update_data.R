@@ -8,6 +8,7 @@ gmdacr::load_functions('functions')
 #                     )
 
 #drive_auth(cache = ".secrets", email = TRUE)
+#get the token: https://gargle.r-lib.org/reference/credentials_user_oauth2.html
 drive_auth(token = readRDS("blah.rds"))
 #get raw data ------------------------------------------------------------------
 

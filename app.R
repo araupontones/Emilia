@@ -27,15 +27,30 @@ options(
 
 
 ui <- fluidPage(
+  tags$head(
+    
+    tags$link(rel = 'stylesheet', href = 'styles.css'),
+    
+    tags$link(rel="preconnect",href="https://fonts.googleapis.com"),
+    tags$link( rel="preconnect",href="https://fonts.gstatic.com"),
+    tags$link( href="https://fonts.googleapis.com/css2?family=Pathway+Extreme:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap",
+               rel="stylesheet"),
+    tags$link( href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap", rel="stylesheet")
+    
+    
+  ),
   
+  fluidRow(class = 'purple refresh-bar',
   
-  uiOutput('refresh_text'),
-  actionButton('boton', "Refresh data"),
+  uiOutput('refresh_text', class = "inline-block vc-line-50"),
+  actionButton('boton', "Refresh data", class = "btn-info"),
+  
+  ),
   br(),
   sidebarLayout(
     
-    sidebarPanel(
-      tags$head(tags$style("#plot{height:95vh !important;}")),
+    sidebarPanel(width = 2,
+      tags$head(tags$style("#plot{height:85vh !important;}")),
       selectInput('chart_type',
                   'Select analysis',
                   choices = c('Nap track', 
@@ -96,7 +111,9 @@ server <- function(input, output, session) {
   
   refresh_text <- reactive({
     
-    rio::import('data/last_refreshed.rds')
+    date <- rio::import('data/last_refreshed.rds')
+    
+    format(date, "%d %B %Y at %H:%M")
     
   })
   

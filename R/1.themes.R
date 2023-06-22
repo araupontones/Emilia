@@ -6,6 +6,8 @@ theme_emilia <- function(){
       plot.title.position = 'plot',
       plot.title = element_text(size = 24, margin = margin(b = 15)),
       panel.background = element_rect(fill = 'white', color = NA),
-      plot.background = element_rect(fill = 'white'))
+      plot.background = element_rect(fill = 'white', colour = NA)
+      
+      )
   
 }
