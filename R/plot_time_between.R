@@ -13,7 +13,7 @@ plot_time_between <- function(data_){
                linetype = 'dotted',
                size = 1) +
     #scale axis -------------------------------------------------------------------
-  scale_x_datetime(breaks = '1 day',
+  scale_x_datetime(breaks = '10 days',
                    labels = function(x)format(x,"%d %b")) +
     labs(x = '',
          y = 'Minutos',

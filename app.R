@@ -41,9 +41,14 @@ ui <- fluidPage(
   ),
   
   fluidRow(class = 'purple refresh-bar',
+  column(8,
+         uiOutput('refresh_text')
+         ),
+  column(4,
+         actionButton('boton', "Refresh data", class = "btn-info")
+         )
+ 
   
-  uiOutput('refresh_text', class = "inline-block vc-line-50"),
-  actionButton('boton', "Refresh data", class = "btn-info"),
   
   ),
   br(),
@@ -132,13 +137,26 @@ server <- function(input, output, session) {
     
     if(input$chart_type == 'Nap track'){
       
+      print(names(data_app()))
+      # data_plot <- data_app() %>%
+      #   select(fecha, duerme, despierta) %>%
+      #   pivot_longer(-c(fecha),
+      #                names_to = "indicador",
+      #                values_to = 'hora') %>%
+      #   dplyr::filter(!is.na(hora)) %>%
+      #   mutate(hora_plot = lubridate::ymd_hms(paste("2025-01-01", str_sub(hora, 11,19))))
+      
+      
       data_plot <- data_app() %>%
-        select(fecha, duerme, despierta) %>%
-        pivot_longer(-c(fecha),
-                     names_to = "indicador",
-                     values_to = 'hora') %>%
-        dplyr::filter(!is.na(hora)) %>%
-        mutate(hora_plot = lubridate::ymd_hms(paste("2025-01-01", str_sub(hora, 11,19))))
+        select(fecha, duerme, despierta, duracion) %>%
+        mutate(long = duracion >= 80,
+               long = ifelse(is.na(long),F, long),
+               long = ifelse(long, ">= 80 min","< 80 min"),
+               
+        ) %>%
+        mutate(across(c(duerme, despierta), function(x){lubridate::ymd_hms(paste("2025-01-01", str_sub(x, 11,19)))})) %>%
+        dplyr::filter(duerme >= "2025-01-01 07:00:00" )
+      
       
       
     } else if(input$chart_type %in% c("Total nap time",

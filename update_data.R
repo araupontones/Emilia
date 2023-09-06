@@ -18,7 +18,7 @@ my_txt <- tempfile(fileext = '.txt')
 #Download data ----------------------------------------------------------------
 
 #get list of files with this pattern
-f <- drive_get("Emilia/WhatsApp Chat with Marti España.txt")
+f <- drive_get("Emilia/WhatsApp Chat with Martina Garcia Aisa.txt")
 ?drive_get
 
 #get the time of each file

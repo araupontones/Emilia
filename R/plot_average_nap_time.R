@@ -29,7 +29,7 @@ plot_average_nap_time <- function(data_){
   }) +
     
     #scale axis -------------------------------------------------------------------
-  scale_x_date(breaks = '1 day',
+  scale_x_date(breaks = '10 day',
                labels = function(x)format(x,"%d %b")) +
     scale_y_continuous(breaks = seq(0,150,10)) +
     

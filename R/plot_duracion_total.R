@@ -19,7 +19,7 @@ lapply(promedio, function(x){
              size= 1)
 }) +
   
-  scale_x_date(breaks = '1 day',
+  scale_x_date(breaks = '10 days',
                labels = function(x)format(x,"%d %b")) +
   labs(y = 'Duración (minutos)',
        x = '',
